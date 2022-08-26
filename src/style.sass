@@ -18,6 +18,8 @@
 .money_box
     @include gradientPreset
     display: flex
+    position: sticky
+    top: 0
     justify-content: center
     padding: 18px
     h1
@@ -34,9 +36,9 @@
     gap: 16px
     transition: box-shadow 150ms ease-in-out
     img
-        width: 150px
-        height: 150px
-        object-fit: cover
+        width: 250px
+        height: 250px
+        object-fit: contain
         margin: 24px 0 12px 0
     &:hover
         box-shadow: 0px 0px 16px #00bfffcb
@@ -61,8 +63,13 @@
 
         border: 0
         transition: box-shadow 150ms ease-in-out
-    .btn-gradient
+    .btn-buy
         @include gradientPreset
+    .btn-sell
+        color: white
+        background-color: #fd2727
+        &:hover
+            box-shadow: 0px 0px 8px #b70000
 
 .receipt_box
     display: flex
