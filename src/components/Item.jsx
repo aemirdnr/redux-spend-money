@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { addToReceipt, removeFromReceipt } from "../redux/basketSlice";
 import { buyProduct, sellProduct } from "../redux/moneySlice";
 
 const moneyFormatter = new Intl.NumberFormat();
@@ -7,12 +8,20 @@ const moneyFormatter = new Intl.NumberFormat();
 function Item({ itemImage, itemPrice, itemName }) {
   const dispatch = useDispatch();
   const money = useSelector((state) => state.money.balance);
+
   const [count, setCount] = useState(0);
 
   const buyHandle = () => {
     if (itemPrice <= money) {
       dispatch(buyProduct(itemPrice));
       setCount(count + 1);
+      dispatch(
+        addToReceipt({
+          productName: itemName,
+          productCount: 1,
+          productPrice: itemPrice,
+        })
+      );
     }
   };
 
@@ -20,6 +29,13 @@ function Item({ itemImage, itemPrice, itemName }) {
     if (count > 0) {
       dispatch(sellProduct(itemPrice));
       setCount(count - 1);
+      dispatch(
+        removeFromReceipt({
+          productName: itemName,
+          productCount: 1,
+          productPrice: itemPrice,
+        })
+      );
     }
   };
 
@@ -34,11 +50,24 @@ function Item({ itemImage, itemPrice, itemName }) {
           </span>
         </div>
         <div className="d-flex justify-content-center gap-3">
-          <button className="item_button" onClick={sellHandle}>
+          <button
+            className={count >= 1 ? "item_button btn-sell" : "item_button"}
+            onClick={sellHandle}
+          >
             SELL
           </button>
-          <input className="item_count w-25" type="number" value={count} />
-          <button className="item_button btn-buy" onClick={buyHandle}>
+          <input
+            className="item_count w-25"
+            type="number"
+            value={count}
+            readOnly
+          />
+          <button
+            className={
+              money >= itemPrice ? "item_button btn-buy" : "item_button"
+            }
+            onClick={buyHandle}
+          >
             BUY
           </button>
         </div>
